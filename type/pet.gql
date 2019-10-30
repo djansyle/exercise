@@ -1,0 +1,73 @@
+enum PetColor {
+  WHITE
+  BROWN
+  BLACK
+  ORANGE
+}
+
+enum PetBreed {
+  CAT
+  DOG
+}
+
+interface Pet {
+  id: ID!
+  name: String!
+  color: PetColor!
+  age: Int!
+  breed: PetBreed!
+  owner: Owner!
+}
+
+type Cat implements Pet {
+  name: String!
+  color: PetColor!
+  age: Int!
+  breed: PetBreed!
+}
+
+type Dog implements Pet {
+  name: String!
+  color: PetColor!
+  age: Int!
+  breed: PetBreed!
+}
+
+type PetsEdge {
+  cursor: String!
+  node: Pet!
+}
+
+type PetsConnection {
+  totalCount: Int!
+  edges: [PetsEdge!]!
+  pageInfo: PageInfo!
+}
+
+input CreatePetInput {
+  breed: PetBreed!
+  name: String!
+  color: PetColor!
+  age: Int!
+  breed: PetBreed!
+  owner: Owner
+}
+
+input EditPetInput {
+  breed: PetBreed
+  name: String
+  color: PetColor
+  age: Int
+  breed: PetBreed
+  owner: Owner
+}
+
+type Mutation {
+  createPet(input: CreatePetInput): ID!
+  editPet(pet: ID!, input: EditPetInput!): Boolean!
+}
+
+# Bonus
+type Query {
+  strayPets: PetsConnection!
+}

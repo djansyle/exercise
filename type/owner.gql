@@ -1,0 +1,39 @@
+type Owner {
+  id: ID!
+  name: String!
+  address: String!
+  phone: String
+  email: String
+
+  pets(first: Int, after: String): PetsConnection!
+}
+
+type OwnerEdge {
+  cursor: String!
+  node: Owner!
+}
+
+type OwnersConnection {
+  totalCount: Int!
+  edges: [OwnerEdge!]!
+  pageInfo: PageInfo!
+}
+
+input CreateOwnerInput {
+  name: String!
+  address: String!
+  phone: String
+  email: String
+}
+
+input OwnerPetsFilterInput {
+  owner: ID!
+}
+
+type Query {
+  owners(first: Int, after: String): OwnersConnection!
+}
+
+type Mutation {
+  createOwner(input: CreateOwnerInput): ID!
+}

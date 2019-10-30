@@ -1,0 +1,5 @@
+
+type PageInfo {
+  hasNextPage: Boolean!
+  endCursor: Binary
+}

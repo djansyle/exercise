@@ -1,5 +1,5 @@
 
 type PageInfo {
   hasNextPage: Boolean!
-  endCursor: Binary
+  endCursor: String
 }

@@ -20,17 +20,21 @@ interface Pet {
 }
 
 type Cat implements Pet {
+  id: ID!
   name: String!
   color: PetColor!
   age: Int!
   breed: PetBreed!
+  owner: Owner!
 }
 
 type Dog implements Pet {
+  id: ID!
   name: String!
   color: PetColor!
   age: Int!
   breed: PetBreed!
+  owner: Owner!
 }
 
 type PetsEdge {
@@ -49,8 +53,7 @@ input CreatePetInput {
   name: String!
   color: PetColor!
   age: Int!
-  breed: PetBreed!
-  owner: Owner
+  owner: ID
 }
 
 input EditPetInput {
@@ -58,8 +61,7 @@ input EditPetInput {
   name: String
   color: PetColor
   age: Int
-  breed: PetBreed
-  owner: Owner
+  owner: ID
 }
 
 type Mutation {

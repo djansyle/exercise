@@ -18,8 +18,8 @@ export default function paginate<T extends Object>(
 
   const edges = (args.first ? chain.limit(args.first) : chain)
     .find(query)
-    .map(edge => ({ ...edge, cursor: edge.cursor.toString(36) }))
-    .data();
+    .data()
+    .map(edge => ({ ...edge, cursor: edge.cursor.toString(36) }));
 
   const totalMatch = col.count(query);
   const totalCount = col.count();

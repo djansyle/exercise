@@ -10,6 +10,7 @@ import ms from 'ms';
 
 const app = express();
 let httpServer: Server;
+
 const server = new ApolloServer({
   typeDefs: mergeTypes(
     fileLoader(path.join(__dirname, '../type'), { recursive: true }),

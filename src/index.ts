@@ -47,15 +47,6 @@ async function start() {
 async function stop() {
   await new Promise(resolve => httpServer.close(() => resolve()));
   await server.stop();
-  return new Promise((resolve, reject) => {
-    database.db.saveDatabase(err => {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve();
-    });
-  });
 }
 
 async function gracefulShutdown() {

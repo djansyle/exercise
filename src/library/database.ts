@@ -19,7 +19,7 @@ export type Pet = {
   breed: PetBreed;
   owner?: string;
   cursor: number;
-}
+};
 
 function ensureCollectionExists(ref: Loki, name: string) {
   const collection = ref.getCollection(name);
@@ -46,8 +46,20 @@ export async function initialize() {
   });
 }
 
+export async function flush() {
+  return new Promise((resolve, reject) => {
+    db.saveDatabase(err => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve();
+    });
+  });
+}
+
 export function ownerCollection() {
-  return db.getCollection<Owner>('owner')
+  return db.getCollection<Owner>('owner');
 }
 
 export function petCollection() {

@@ -1,5 +1,5 @@
 import { fileLoader, mergeResolvers, mergeTypes } from 'merge-graphql-schemas';
-import { ApolloServer } from 'apollo-server-express';
+import { ApolloServer, ApolloError } from 'apollo-server-express';
 import express from 'express';
 import path from 'path';
 import http, { Server } from 'http';
@@ -19,6 +19,18 @@ const server = new ApolloServer({
   resolvers: mergeResolvers(
     fileLoader(path.join(__dirname, './resolver'), { recursive: true }),
   ),
+  formatError: err => {
+    // no need to log user error
+    if (!(err instanceof ApolloError)) {
+      console.log(err);
+    }
+
+    if (process.env.NODE_ENV === 'production') {
+      delete err.stack;
+    }
+
+    return err;
+  },
 });
 
 async function start() {

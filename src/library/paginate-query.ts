@@ -5,21 +5,25 @@ export default function paginate<T extends Object>(
   col: Collection<T & { cursor: number }>,
   args: {
     first?: number;
-    after?: string,
-    filter?: { [key: string]: any },
-  }) {
+    after?: string;
+    filter?: { [key: string]: any };
+  },
+) {
   const chain = col.chain();
-
   let query: any = args.filter || {};
 
   if (args.after) {
     Object.assign(query, { cursor: { $gt: parseInt(args.after, 36) } });
   }
 
-  const edges = (args.first ? chain.limit(args.first) : chain).find(query).data();
+  const edges = (args.first ? chain.limit(args.first) : chain)
+    .find(query)
+    .map(edge => ({ ...edge, cursor: edge.cursor.toString(36) }))
+    .data();
+
   const totalMatch = col.count(query);
   const totalCount = col.count();
-  const endCursor = edges.length > 0 ? R.prop('cursor')(R.last(edges)).toString(36) : null;
+  const endCursor = edges.length > 0 ? R.prop('cursor')(R.last(edges)) : null;
 
   return {
     totalCount,

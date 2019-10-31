@@ -5,7 +5,7 @@ type Owner {
   phone: String
   email: String
 
-  pets(first: Int, after: String): PetsConnection!
+  pets(first: UInt, after: String): PetsConnection!
 }
 
 type OwnerEdge {
@@ -14,7 +14,7 @@ type OwnerEdge {
 }
 
 type OwnersConnection {
-  totalCount: Int!
+  totalCount: UInt!
   edges: [OwnerEdge!]!
   pageInfo: PageInfo!
 }

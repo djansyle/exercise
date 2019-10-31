@@ -14,27 +14,27 @@ interface Pet {
   id: ID!
   name: String!
   color: PetColor!
-  age: Int!
+  age: UInt!
   breed: PetBreed!
-  owner: Owner!
+  owner: Owner
 }
 
 type Cat implements Pet {
   id: ID!
   name: String!
   color: PetColor!
-  age: Int!
+  age: UInt!
   breed: PetBreed!
-  owner: Owner!
+  owner: Owner
 }
 
 type Dog implements Pet {
   id: ID!
   name: String!
   color: PetColor!
-  age: Int!
+  age: UInt!
   breed: PetBreed!
-  owner: Owner!
+  owner: Owner
 }
 
 type PetsEdge {
@@ -43,7 +43,7 @@ type PetsEdge {
 }
 
 type PetsConnection {
-  totalCount: Int!
+  totalCount: UInt!
   edges: [PetsEdge!]!
   pageInfo: PageInfo!
 }
@@ -52,7 +52,7 @@ input CreatePetInput {
   breed: PetBreed!
   name: String!
   color: PetColor!
-  age: Int!
+  age: UInt!
   owner: ID
 }
 
@@ -60,7 +60,7 @@ input EditPetInput {
   breed: PetBreed
   name: String
   color: PetColor
-  age: Int
+  age: UInt
   owner: ID
 }
 

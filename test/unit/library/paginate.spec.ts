@@ -2,15 +2,12 @@ import { expect } from 'chai';
 import Loki from 'lokijs';
 import R from 'ramda';
 
-import paginate, { ConnectionInfo } from '../../../src/library/paginate-query';
+import paginate, {
+  ConnectionInfo,
+  toCursor,
+} from '../../../src/library/paginate-query';
 
 const db = new Loki('test');
-
-function toCursor(val: number) {
-  return val.toString(36);
-}
-
-function getCursors(result: ConnectionInfo) {}
 
 describe('Library: Paginate', function() {
   before(function() {

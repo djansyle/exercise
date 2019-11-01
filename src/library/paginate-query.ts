@@ -10,6 +10,12 @@ export type ConnectionInfo<T extends Object = {}> = {
   };
 };
 
+export type PaginationParams = { first?: number; after?: string };
+
+export function toCursor(val: number) {
+  return val.toString(36);
+}
+
 export default function paginate<T extends Object>(
   col: Collection<T & { cursor: number }>,
   args: {

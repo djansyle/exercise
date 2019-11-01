@@ -64,12 +64,15 @@ input EditPetInput {
   owner: ID
 }
 
+input PetsFilterInput {
+  owner: ID
+}
+
 type Mutation {
   createPet(input: CreatePetInput): ID!
   editPet(pet: ID!, input: EditPetInput!): Boolean!
 }
 
-# Bonus
 type Query {
-  strayPets: PetsConnection!
+  pets(first: UInt, after: String, filter: PetsFilterInput): PetsConnection!
 }

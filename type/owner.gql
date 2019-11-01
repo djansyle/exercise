@@ -4,8 +4,6 @@ type Owner {
   address: String!
   phone: String
   email: String
-
-  pets(first: UInt, after: String): PetsConnection!
 }
 
 type OwnerEdge {
@@ -31,7 +29,7 @@ input OwnerPetsFilterInput {
 }
 
 type Query {
-  owners(first: Int, after: String): OwnersConnection!
+  owners(first: UInt, after: String): OwnersConnection!
   owner(id: ID!): Owner
 }
 

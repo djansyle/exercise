@@ -44,7 +44,7 @@ async function start() {
   console.log(`🚀 Application started at port ${httpPort}.`);
 }
 
-async function stop() {
+export async function stop() {
   await new Promise(resolve => httpServer.close(() => resolve()));
   await server.stop();
 }
@@ -67,4 +67,4 @@ process.on('SIGINT', gracefulShutdown);
 process.on('SIGHUP', gracefulShutdown);
 process.on('SIGTERM', gracefulShutdown);
 
-start();
+export default start();

@@ -3,8 +3,12 @@ import paginate from '../../library/paginate-query';
 
 export default {
   Query: {
-    async owners(_obj: {}, args: { first?: number; after?: string }) {
+    owners(_obj: {}, args: { first?: number; after?: string }) {
       return paginate<Owner>(ownerCollection(), args);
+    },
+
+    owner(_obj: {}, args: { id: string }) {
+      return ownerCollection().findOne(args);
     },
   },
 };

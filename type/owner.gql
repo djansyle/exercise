@@ -32,6 +32,7 @@ input OwnerPetsFilterInput {
 
 type Query {
   owners(first: Int, after: String): OwnersConnection!
+  owner(id: ID!): Owner
 }
 
 type Mutation {

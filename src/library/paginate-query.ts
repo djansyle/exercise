@@ -1,25 +1,39 @@
 import { Collection } from 'lokijs';
 import R from 'ramda';
 
+export type ConnectionInfo<T extends Object = {}> = {
+  totalCount: number;
+  edges: { cursor: string; node: T }[];
+  pageInfo: {
+    hasNextPage: boolean;
+    endCursor: string | null;
+  };
+};
+
 export default function paginate<T extends Object>(
   col: Collection<T & { cursor: number }>,
   args: {
     first?: number;
     after?: string;
     filter?: { [key: string]: any };
-  },
-) {
+  } = {},
+): ConnectionInfo<T> {
   const chain = col.chain();
   let query: any = args.filter || {};
 
   if (args.after) {
-    Object.assign(query, { cursor: { $gt: parseInt(args.after, 36) } });
+    Object.assign(query, { cursor: { $lt: parseInt(args.after, 36) } });
   }
 
-  const edges = (args.first ? chain.limit(args.first) : chain)
-    .find(query)
+  let result = chain.find(query);
+  if (args.first) {
+    result = result.limit(args.first);
+  }
+
+  const edges = result
+    .simplesort('cursor', { desc: true })
     .data()
-    .map(edge => ({ ...edge, cursor: edge.cursor.toString(36) }));
+    .map(node => ({ node, cursor: node.cursor.toString(36) }));
 
   const totalMatch = col.count(query);
   const totalCount = col.count();
@@ -27,7 +41,7 @@ export default function paginate<T extends Object>(
 
   return {
     totalCount,
-    edges: R.map(edge => ({ cursor: edge.cursor, node: edge }), edges),
+    edges,
     pageInfo: {
       hasNextPage: totalMatch > edges.length,
       endCursor,

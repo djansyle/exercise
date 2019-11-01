@@ -53,10 +53,10 @@ async function gracefulShutdown() {
   try {
     await race([
       stop(),
-      async function() {
+      (async function() {
         await delay(ms('10s'));
         throw new Error('Failed to shutdown gracefully.');
-      },
+      })(),
     ]);
   } catch (e) {
     console.log(e);

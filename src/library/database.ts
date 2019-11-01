@@ -17,7 +17,8 @@ export type Pet = {
   name: string;
   color: PetColor;
   breed: PetBreed;
-  owner?: string;
+  age: number;
+  owner: string | null;
   cursor: number;
 };
 

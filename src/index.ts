@@ -10,6 +10,7 @@ import ms from 'ms';
 
 const app = express();
 let httpServer: Server;
+let exiting = false;
 
 const server = new ApolloServer({
   typeDefs: mergeTypes(
@@ -47,9 +48,16 @@ async function start() {
 export async function stop() {
   await new Promise(resolve => httpServer.close(() => resolve()));
   await server.stop();
+  await database.flush();
 }
 
 async function gracefulShutdown() {
+  if (exiting) {
+    return;
+  }
+
+  exiting = true;
+
   try {
     await race([
       stop(),
@@ -60,11 +68,13 @@ async function gracefulShutdown() {
     ]);
   } catch (e) {
     console.log(e);
+    process.exit(-1);
   }
+
+  process.exit(0);
 }
 
 process.on('SIGINT', gracefulShutdown);
-process.on('SIGHUP', gracefulShutdown);
 process.on('SIGTERM', gracefulShutdown);
 
 export default start();

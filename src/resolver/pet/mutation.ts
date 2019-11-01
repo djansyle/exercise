@@ -6,13 +6,9 @@ import {
 } from '../../library/database';
 import { v4 as uuid } from 'uuid';
 import { ResourceNotFoundError } from '../../library/error';
+import { ValidationError } from 'apollo-server-core';
 
-function ownerExists(id: string) {
-  const owner = ownerCollection().findOne({ id });
-  if (!owner) {
-    throw new ResourceNotFoundError(id, 'owner');
-  }
-}
+const nonNullableProperties = ['breed', 'name', 'color', 'age'];
 
 export default {
   Mutation: {
@@ -28,15 +24,18 @@ export default {
         };
       },
     ) {
-
       const { owner } = args.input;
       if (owner) {
-        ownerExists(owner);
+        const ownerExists = ownerCollection().findOne({ id: owner });
+        if (!ownerExists) {
+          throw new ResourceNotFoundError(owner, 'owner');
+        }
       }
 
       const id = uuid();
       petCollection().insert({
         id,
+        owner: null,
         ...args.input,
         cursor: Date.now(),
       });
@@ -47,7 +46,7 @@ export default {
     editPet(
       _obj: {},
       args: {
-        id: string;
+        pet: string;
         input: {
           breed?: PetBreed;
           name?: string;
@@ -57,14 +56,28 @@ export default {
         };
       },
     ) {
-      const pet = petCollection().find({ id: args.id });
+      const invalidValues = nonNullableProperties.filter(
+        (prop: any) => (args.input as any)[prop] === null,
+      );
+
+      if (invalidValues.length > 0) {
+        const nullProperties = invalidValues.join(',');
+        throw new ValidationError(
+          `Cannot set "null" value to the following properties (${nullProperties}).`,
+        );
+      }
+
+      const pet = petCollection().findOne({ id: args.pet });
       if (!pet) {
-        throw new ResourceNotFoundError(args.id, 'pet');
+        throw new ResourceNotFoundError(args.pet, 'pet');
       }
 
       const { owner } = args.input;
       if (owner) {
-        ownerExists(owner);
+        const ownerExists = ownerCollection().findOne({ id: owner });
+        if (!ownerExists) {
+          throw new ResourceNotFoundError(owner, 'owner');
+        }
       }
 
       Object.assign(pet, args.input);

@@ -22,7 +22,7 @@ export function randomOwnerInfo() {
   };
 }
 
-export function randomPetInfo(owner?: string): Pet {
+export function randomPetInfo(owner: string | null = null): Pet {
   return {
     id: uuid(),
     breed: ['DOG', 'CAT'][chance.integer({ min: 0, max: 1 })] as PetBreed,
@@ -31,6 +31,7 @@ export function randomPetInfo(owner?: string): Pet {
     ] as PetColor,
     cursor: Date.now(),
     name: chance.name(),
+    age: chance.integer({ min: 0, max: 20 }),
     owner,
   };
 }
@@ -86,6 +87,62 @@ export async function ownersQuery(
         pageInfo {
           hasNextPage
           endCursor
+        }
+      }
+    }
+  `,
+    args,
+  );
+}
+
+export async function createPetMutation(args: {
+  input: Omit<Pet, 'id' | 'cursor'>;
+}) {
+  return client.request(
+    `
+    mutation createPet($input: CreatePetInput!) {
+      createPet(input: $input)
+    }
+  `,
+    args,
+  );
+}
+
+export async function editPetMutation(args: {
+  pet: string;
+  input: Partial<Omit<Pet, 'id' | 'cursor'>>;
+}) {
+  return client.request(
+    `
+    mutation editPet($pet: ID!, $input: EditPetInput!) {
+      editPet(pet: $pet, input: $input)
+    }
+  `,
+    args,
+  );
+}
+
+export async function petsQuery(
+  args: PaginationParams & { filter?: { owner?: string } } = {},
+) {
+  return client.request(
+    `
+    query pets($first: UInt, $after: String, $filter: PetsFilterInput) {
+      pets(first: $first, after: $after, filter: $filter) {
+        totalCount
+        edges {
+          cursor
+          node {
+            id
+            name
+            color
+            age
+            breed
+          }
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
         }
       }
     }

@@ -56,10 +56,13 @@ export function randomCatInfo(owner: string | null = null) {
   };
 }
 
-export async function createOwnerMutation(args: {
-  input: Omit<Owner, 'id' | 'cursor'>;
-}) {
-  return client.request(
+export async function createOwnerMutation(
+  args: {
+    input: Omit<Owner, 'id' | 'cursor'>;
+  },
+  request = client.request.bind(client),
+) {
+  return request(
     `
     mutation createOwner($input: CreateOwnerInput!){
       createOwner(input: $input)
@@ -69,8 +72,11 @@ export async function createOwnerMutation(args: {
   );
 }
 
-export async function ownerQuery(args: { id: string }) {
-  return client.request(
+export async function ownerQuery(
+  args: { id: string },
+  request = client.request.bind(client),
+) {
+  return request(
     `
     query owner($id: ID!){
       owner(id: $id) {
@@ -88,8 +94,9 @@ export async function ownerQuery(args: { id: string }) {
 
 export async function ownersQuery(
   args: { first?: number; after?: string } = {},
+  request = client.request.bind(client),
 ) {
-  return client.request(
+  return request(
     `
     query owners($first: UInt, $after: String){
       owners(first: $first, after: $after) {
@@ -115,10 +122,13 @@ export async function ownersQuery(
   );
 }
 
-export async function createPetMutation(args: {
-  input: Omit<Pet, 'id' | 'cursor'>;
-}) {
-  return client.request(
+export async function createPetMutation(
+  args: {
+    input: Omit<Pet, 'id' | 'cursor'>;
+  },
+  request = client.request.bind(client),
+) {
+  return request(
     `
     mutation createPet($input: CreatePetInput!) {
       createPet(input: $input)
@@ -128,11 +138,14 @@ export async function createPetMutation(args: {
   );
 }
 
-export async function editPetMutation(args: {
-  pet: string;
-  input: Partial<Omit<Pet, 'id' | 'cursor'>>;
-}) {
-  return client.request(
+export async function editPetMutation(
+  args: {
+    pet: string;
+    input: Partial<Omit<Pet, 'id' | 'cursor'>>;
+  },
+  request = client.request.bind(client),
+) {
+  return request(
     `
     mutation editPet($pet: ID!, $input: EditPetInput!) {
       editPet(pet: $pet, input: $input)
@@ -144,8 +157,9 @@ export async function editPetMutation(args: {
 
 export async function petsQuery(
   args: PaginationParams & { filter?: { owner?: string } } = {},
+  request = client.request.bind(client),
 ) {
-  return client.request(
+  return request(
     `
     query pets($first: UInt, $after: String, $filter: PetsFilterInput) {
       pets(first: $first, after: $after, filter: $filter) {

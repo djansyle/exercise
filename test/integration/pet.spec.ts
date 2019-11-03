@@ -6,17 +6,21 @@ import { petCollection, ownerCollection } from '../../src/library/database';
 import './common';
 import {
   randomOwnerInfo,
-  randomPetInfo,
+  randomDogInfo,
+  randomCatInfo,
   createPetMutation,
   editPetMutation,
   petsQuery,
 } from './helper';
+
 import { toCursor } from '../../src/library/paginate-query';
+
+chai.use(chaiAsPromised);
 
 describe('GraphQL: Pet', function() {
   beforeEach(function() {
     this.owner = randomOwnerInfo();
-    this.pet = randomPetInfo();
+    this.pet = randomDogInfo();
 
     ownerCollection().insert(R.clone(this.owner));
   });
@@ -78,7 +82,7 @@ describe('GraphQL: Pet', function() {
 
   describe('Mutation: editPet', function() {
     beforeEach(function() {
-      this.pet = randomPetInfo();
+      this.pet = randomDogInfo();
     });
 
     describe('Given pet exists', function() {
@@ -88,13 +92,13 @@ describe('GraphQL: Pet', function() {
 
       describe('When fields contains invalid values', function() {
         it('should give an error with code "GRAPHQL_VALIDATION_FAILED"', async function() {
-          const error = await expect(
+          let error = await expect(
             editPetMutation({ pet: this.pet.id, input: { name: null } }),
           ).to.eventually.be.rejected;
 
           expect(R.path(['response', 'errors'])(error)).to.have.lengthOf(1);
 
-          const { extensions } = error.response.errors[0];
+          let { extensions } = error.response.errors[0];
           expect(extensions).to.have.property(
             'code',
             'GRAPHQL_VALIDATION_FAILED',
@@ -104,6 +108,19 @@ describe('GraphQL: Pet', function() {
           expect(pet)
             .to.have.property('owner', this.pet.owner)
             .and.to.not.equal('nonexisting');
+
+          // our current pet is a dog breed
+          error = await expect(
+            editPetMutation({ pet: this.pet.id, input: { breed: 'PERSIAN' } }),
+          ).to.eventually.be.rejected;
+
+          expect(R.path(['response', 'errors'])(error)).to.have.lengthOf(1);
+          ({ extensions } = error.response.errors[0]);
+
+          expect(extensions).to.have.property(
+            'code',
+            'GRAPHQL_VALIDATION_FAILED',
+          );
         });
       });
 
@@ -156,8 +173,8 @@ describe('GraphQL: Pet', function() {
 
       // added + 100 to make sure that it's the latest one
       this.pets = [
-        { ...randomPetInfo(), cursor: Date.now() + 100 },
-        randomPetInfo(this.owner.id),
+        { ...randomDogInfo(), cursor: Date.now() + 100 },
+        randomDogInfo(this.owner.id),
       ];
 
       petCollection().insert(R.clone(this.pets));
@@ -209,7 +226,10 @@ describe('GraphQL: Pet', function() {
       expect(edges).to.deep.equal([
         {
           cursor: toCursor(this.pets[1].cursor),
-          node: R.omit(['cursor', 'owner'])(this.pets[1]),
+          node: R.omit(['cursor', 'owner', 'type'])({
+            ...this.pets[1],
+            __typename: 'Dog',
+          }),
         },
       ]);
 

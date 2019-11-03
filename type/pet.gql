@@ -10,13 +10,30 @@ enum PetType {
   DOG
 }
 
+enum Breed {
+  # Dogs
+  LABRADOR_RETRIEVER
+  PUG
+  BEAGLE
+  SIBERIAN_HUSKY
+  BULLDOG
+
+  # Cats
+  PERSIAN
+  RUSSIAN
+  BENGEL
+  MAINE_COON
+  RAGDOLL
+  BIRMAN
+}
+
 interface Pet {
   id: ID!
   name: String!
   color: PetColor!
   age: UInt!
-  type: PetType!
   owner: Owner
+  breed: Breed!
 }
 
 type Cat implements Pet {
@@ -24,7 +41,7 @@ type Cat implements Pet {
   name: String!
   color: PetColor!
   age: UInt!
-  type: PetType!
+  breed: Breed!
   owner: Owner
 }
 
@@ -33,7 +50,7 @@ type Dog implements Pet {
   name: String!
   color: PetColor!
   age: UInt!
-  type: PetType!
+  breed: Breed!
   owner: Owner
 }
 
@@ -53,6 +70,7 @@ input CreatePetInput {
   name: String!
   color: PetColor!
   age: UInt!
+  breed: Breed!
   owner: ID
 }
 
@@ -62,6 +80,7 @@ input EditPetInput {
   color: PetColor
   age: UInt
   owner: ID
+  breed: Breed
 }
 
 input PetsFilterInput {

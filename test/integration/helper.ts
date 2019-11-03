@@ -22,14 +22,34 @@ export function randomOwnerInfo() {
   };
 }
 
-export function randomPetInfo(owner: string | null = null): Pet {
+export function randomDogInfo(owner: string | null = null) {
   return {
     id: uuid(),
-    type: ['DOG', 'CAT'][chance.integer({ min: 0, max: 1 })] as PetType,
+    type: 'DOG' as PetType,
     color: ['BLACK', 'BROWN', 'ORANGE', 'WHITE'][
       chance.integer({ min: 0, max: 3 })
     ] as PetColor,
     cursor: Date.now(),
+    breed: ['LABRADOR_RETRIEVER', 'PUG', 'BEAGLE', 'SIBERIAN_HUSKY', 'BULLDOG'][
+      chance.integer({ min: 0, max: 4 })
+    ],
+    name: chance.name(),
+    age: chance.integer({ min: 0, max: 20 }),
+    owner,
+  };
+}
+
+export function randomCatInfo(owner: string | null = null) {
+  return {
+    id: uuid(),
+    type: 'CAT' as PetType,
+    color: ['BLACK', 'BROWN', 'ORANGE', 'WHITE'][
+      chance.integer({ min: 0, max: 3 })
+    ] as PetColor,
+    cursor: Date.now(),
+    breed: ['PERSIAN', 'RUSSIAN', 'BENGEL', 'MAINE_COON', 'RAGDOLL', 'BIRMAN'][
+      chance.integer({ min: 0, max: 5 })
+    ],
     name: chance.name(),
     age: chance.integer({ min: 0, max: 20 }),
     owner,
@@ -137,7 +157,8 @@ export async function petsQuery(
             name
             color
             age
-            type
+            breed
+            __typename
           }
         }
         pageInfo {

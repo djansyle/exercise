@@ -11,6 +11,22 @@ export type Owner = {
 
 export type PetColor = 'WHITE' | 'BROWN' | 'BLACK' | 'ORANGE';
 export type PetType = 'CAT' | 'DOG';
+export type DogBreed =
+  | 'LABRADOR_RETRIEVER'
+  | 'PUG'
+  | 'BEAGLE'
+  | 'SIBERIAN_HUSKY'
+  | 'BULLDOG';
+
+export type CatBreed =
+  | 'PERSIAN'
+  | 'RUSSIAN'
+  | 'BENGEL'
+  | 'MAINE_COON'
+  | 'RAGDOLL'
+  | 'BIRMAN';
+
+export type Breed = DogBreed | CatBreed;
 
 export type Pet = {
   id: string;
@@ -19,6 +35,7 @@ export type Pet = {
   type: PetType;
   age: number;
   owner: string | null;
+  breed: Breed;
   cursor: number;
 };
 

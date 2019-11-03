@@ -10,13 +10,13 @@ export type Owner = {
 };
 
 export type PetColor = 'WHITE' | 'BROWN' | 'BLACK' | 'ORANGE';
-export type PetBreed = 'CAT' | 'DOG';
+export type PetType = 'CAT' | 'DOG';
 
 export type Pet = {
   id: string;
   name: string;
   color: PetColor;
-  breed: PetBreed;
+  type: PetType;
   age: number;
   owner: string | null;
   cursor: number;

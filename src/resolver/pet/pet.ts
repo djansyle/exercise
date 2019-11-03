@@ -1,10 +1,10 @@
 import changeCase from 'change-case';
-import { PetBreed } from '../../library/database';
+import { PetType } from '../../library/database';
 
 export default {
   Pet: {
-    __resolveType(parent: { breed: PetBreed }) {
-      return changeCase.pascalCase(parent.breed);
+    __resolveType(parent: { type: PetType }) {
+      return changeCase.pascalCase(parent.type);
     },
   },
 };

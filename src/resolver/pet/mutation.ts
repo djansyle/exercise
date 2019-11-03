@@ -1,5 +1,5 @@
 import {
-  PetBreed,
+  PetType,
   PetColor,
   petCollection,
   ownerCollection,
@@ -8,7 +8,7 @@ import { v4 as uuid } from 'uuid';
 import { ResourceNotFoundError } from '../../library/error';
 import { ValidationError } from 'apollo-server-core';
 
-const nonNullableProperties = ['breed', 'name', 'color', 'age'];
+const nonNullableProperties = ['type', 'name', 'color', 'age'];
 
 export default {
   Mutation: {
@@ -16,7 +16,7 @@ export default {
       _obj: {},
       args: {
         input: {
-          breed: PetBreed;
+          type: PetType;
           name: string;
           color: PetColor;
           age: number;
@@ -48,7 +48,7 @@ export default {
       args: {
         pet: string;
         input: {
-          breed?: PetBreed;
+          type?: PetType;
           name?: string;
           color?: PetColor;
           age?: number;

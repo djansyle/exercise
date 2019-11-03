@@ -2,7 +2,7 @@ import { GraphQLClient } from 'graphql-request';
 import Chance from 'chance';
 import { v4 as uuid } from 'uuid';
 
-import { Owner, Pet, PetBreed, PetColor } from '../../src/library/database';
+import { Owner, Pet, PetType, PetColor } from '../../src/library/database';
 import { PaginationParams } from '../../src/library/paginate-query';
 
 const client = new GraphQLClient(
@@ -25,7 +25,7 @@ export function randomOwnerInfo() {
 export function randomPetInfo(owner: string | null = null): Pet {
   return {
     id: uuid(),
-    breed: ['DOG', 'CAT'][chance.integer({ min: 0, max: 1 })] as PetBreed,
+    type: ['DOG', 'CAT'][chance.integer({ min: 0, max: 1 })] as PetType,
     color: ['BLACK', 'BROWN', 'ORANGE', 'WHITE'][
       chance.integer({ min: 0, max: 3 })
     ] as PetColor,
@@ -137,7 +137,7 @@ export async function petsQuery(
             name
             color
             age
-            breed
+            type
           }
         }
         pageInfo {

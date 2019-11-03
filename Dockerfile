@@ -2,8 +2,6 @@ FROM node:12.8.0-alpine
 
 WORKDIR /srv/node
 
-ENV NODE_ENV=production
-
 COPY ./build /srv/node/build
 COPY ./package.json /srv/node/package.json
 COPY ./package-lock.json /srv/node/package-lock.json

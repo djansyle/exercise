@@ -93,7 +93,7 @@ describe('GraphQL: Pet', function() {
       describe('When fields contains invalid values', function() {
         it('should give an error with code "GRAPHQL_VALIDATION_FAILED"', async function() {
           let error = await expect(
-            editPetMutation({ pet: this.pet.id, input: { name: null } }),
+            editPetMutation({ id: this.pet.id, input: { name: null } }),
           ).to.eventually.be.rejected;
 
           expect(R.path(['response', 'errors'])(error)).to.have.lengthOf(1);
@@ -111,7 +111,7 @@ describe('GraphQL: Pet', function() {
 
           // our current pet is a dog breed
           error = await expect(
-            editPetMutation({ pet: this.pet.id, input: { breed: 'PERSIAN' } }),
+            editPetMutation({ id: this.pet.id, input: { breed: 'PERSIAN' } }),
           ).to.eventually.be.rejected;
 
           expect(R.path(['response', 'errors'])(error)).to.have.lengthOf(1);
@@ -134,7 +134,7 @@ describe('GraphQL: Pet', function() {
           it('should be able to update the pet', async function() {
             await expect(
               editPetMutation({
-                pet: this.pet.id,
+                id: this.pet.id,
                 input: { owner: this.owner.id },
               }),
             )
@@ -152,7 +152,7 @@ describe('GraphQL: Pet', function() {
           it('should give an error with code "RESOURCE_NOT_FOUND"', async function() {
             const error = await expect(
               editPetMutation({
-                pet: this.pet.id,
+                id: this.pet.id,
                 input: { owner: 'nonexisting' },
               }),
             ).to.eventually.be.rejected;

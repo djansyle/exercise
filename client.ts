@@ -51,7 +51,7 @@ async function execute() {
   console.log(`Adding owner to the pet.`);
 
   result = await editPetMutation(
-    { pet: petId, input: { owner: ownerId } },
+    { id: petId, input: { owner: ownerId } },
     request,
   );
   if (!result.editPet) {

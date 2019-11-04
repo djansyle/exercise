@@ -146,15 +146,15 @@ export async function createPetMutation(
 
 export async function editPetMutation(
   args: {
-    pet: string;
+    id: string;
     input: Partial<Omit<Pet, 'id' | 'cursor'>>;
   },
   request = client.request.bind(client),
 ) {
   return request(
     `
-    mutation editPet($pet: ID!, $input: EditPetInput!) {
-      editPet(pet: $pet, input: $input)
+    mutation editPet($id: ID!, $input: EditPetInput!) {
+      editPet(id: $id, input: $input)
     }
   `,
     args,

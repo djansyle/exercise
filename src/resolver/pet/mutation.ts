@@ -80,7 +80,7 @@ export default {
     editPet(
       _obj: {},
       args: {
-        pet: string;
+        id: string;
         input: {
           type?: PetType;
           name?: string;
@@ -100,9 +100,9 @@ export default {
       }
 
       let { type, breed } = args.input;
-      const pet = petCollection().findOne({ id: args.pet });
+      const pet = petCollection().findOne({ id: args.id });
       if (!pet) {
-        throw new ResourceNotFoundError(args.pet, 'pet');
+        throw new ResourceNotFoundError(args.id, 'pet');
       }
 
       if (!type) {

@@ -89,7 +89,7 @@ input PetsFilterInput {
 
 type Mutation {
   createPet(input: CreatePetInput!): ID!
-  editPet(pet: ID!, input: EditPetInput!): Boolean!
+  editPet(id: ID!, input: EditPetInput!): Boolean!
 }
 
 type Query {
